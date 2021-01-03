@@ -1,0 +1,15 @@
+Package: fumplugin
+Version: 1
+Section: web 
+Priority: optional
+Architecture: i386
+Essential: no
+Depends: libssl1.0.0, libusb-1.0-0 (>= 1.0)
+Recommends: mozilla  
+Installed-Size: 2984
+Maintainer: iman darabi <iman.darabi@gmail.com>
+Provides: fumplugin
+Conflicts: fumplugin
+Replaces: fumplugin
+Description: linux based library for communication with novin afzar HID devices.
+

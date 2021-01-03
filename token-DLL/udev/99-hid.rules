@@ -1,0 +1,25 @@
+# NOVINLIB - linux based library for 
+# communication with novin afzar HID devices.
+# Windows HID simplification
+#
+# iman darabi <iman.darabi@gmail.com>
+# May 12, 2013
+#
+# 
+# 
+# This program is free software; you can redistribute it and/or         
+# modify it under the terms of the GNU General Public License           
+# as published by the Free Software Foundation; either version          
+# 2 of the License, or (at your option) any later version.              
+
+# This is a sample udev file for HIDAPI devices which changes the permissions
+# to 0666 (world readable/writable) for a specified device on Linux systems.
+
+# HIDAPI/libusb
+SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="8ac7", MODE="0666"
+
+# If you think permissions of 0666 are too loose, then see:
+# http://reactivated.net/writing_udev_rules.html for more information on finer
+# grained permission setting. For example, it might be sufficient to just
+# set the group or user owner for specific devices (for example the plugdev
+# group on some systems).

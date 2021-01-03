@@ -1,0 +1,130 @@
+<!--
+    Auto-generated test-site
+-->
+<html>
+<head>
+<title>test page for object fbcontrol</title>
+</head>
+    <script type="text/javascript">
+        function plugin0()
+        {
+            return document.getElementById('plugin0');
+        }
+        plugin = plugin0;
+        function addEvent(obj, name, func)
+        {
+            if (obj.attachEvent) {
+                obj.attachEvent("on"+name, func);
+            } else {
+                obj.addEventListener(name, func, false); 
+            }
+        }
+        
+        function load()
+        {
+            addEvent(plugin(), 'test', function(){
+                alert("Received a test event from the plugin.")
+            });
+        }
+        function pluginLoaded() {
+            alert("Plugin loaded!");
+        }
+        
+        function addTestEvent()
+        {
+            addEvent(plugin(), 'echo', function(txt,count){
+                alert(txt+count);
+            });
+        }
+        
+        function testEvent()
+        {
+            plugin().testEvent();
+        }
+        
+        function pluginValid()
+        {
+            if(plugin().valid){
+                alert(plugin().echo("This plugin seems to be working!"));
+            } else {
+                alert("Plugin is not working :(");
+            }
+        }
+
+	function token()
+	{
+	   public = 1
+	   private = 2
+	   msg = "test message"
+
+	   alert ("Number of devices which is connected : " + plugin().GetDeviceCount())	
+	
+	   plugin().GetToken()
+	   if (plugin().TkErr != 0)
+	   {
+	      alert ("GetToken: errorNo : " + plugin().TkErr)
+	   } else {
+	      alert ("selected device serial : \n\t\t\t" + plugin().serial)
+	   }
+
+	   pubKey = plugin().GetPublicKey()
+	   if (plugin().TkErr != 0)
+	   {
+	      alert ("\n\tGetPublicKey: errorNo : " + plugin().TkErr)
+	   }	
+	   else
+	   {
+	      alert ("publickey is : \n" + pubKey)
+	   }
+	
+	   enc_msg = plugin().RsaEncrypt (public, msg, '333')
+	   if (plugin().TkErr != 0)
+	   {
+	      alert ("\n\tRsaEncrypt: errorNo : " + plugin().TkErr)
+	   }
+	   else 
+	   {
+	      alert ("\n\t encrypted hex message: \n" + enc_msg)
+	   }
+	
+	   new_msg = plugin().RsaDecrypt (private, enc_msg, '333')
+	   if (plugin().TkErr != 0)
+	   {
+	      alert ("\n\tRsaDecrypt : " + plugin().TkErr)
+	   }
+	   else 
+	   {
+	      alert ("\n\tDecrypted message : \n\t\t\t" + new_msg)
+	   }
+	
+	   sgn_msg = plugin().GetSignature (3, msg, '333')
+	   if (plugin().TkErr != 0)
+	   {
+	      alert ("\n\t GetSignature: errorNo : " + plugin().TkErr )
+	   } else {
+	      alert ("\n\tSignature message : \n\t\t\t" + sgn_msg)
+	   }
+	
+	   verify = plugin().VerifySignature (3, msg, sgn_msg)
+	   if (plugin().TkErr != 0)
+	   {
+	      alert ("\n\t VerifySignature: errorNo : " + plugin().TkErr )
+	   } else {
+	      alert ("\n\t verification status : " + verify )
+	   }
+	
+	}
+	
+    </script>
+<body onload="load()">
+<object id="plugin0" type="application/x-fumplugin" width="300" height="300">
+    <param name="onload" value="pluginLoaded" />
+</object><br />
+    
+<a href="#" onclick="javascript:pluginValid()">Click me!</a> <br />
+<a href="#" onclick="javascript:addTestEvent()">Activate click counter</a> <br />
+<a href="#" onclick="javascript:testEvent()">Fire a test event</a> <br />
+<a href="#" onclick="javascript:token()()">test token functions</a> <br />
+
+</body>
+</html>

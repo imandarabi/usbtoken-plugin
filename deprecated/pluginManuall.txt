@@ -1,0 +1,165 @@
+# fumPlugin version 0.1
+# ferdowsi university of mashhad <http://its.um.ac.ir>
+# written by : Iman Darabi <iman.darabi@gmail.com>
+
+NOVIN TOKEN FUNCTIONS:
+
+      	GetToken () -> void
+		Description: this function is combination of three function "GetFirstDevice, GetCurrDevSerial, SelectDevice".
+		so easy so fast ... . 
+ 
+	GetPublicKey() -> string
+		   Description: return public key of token. 
+		       note: format of public key is hex data.	
+
+        RsaEncrypt (key_type, from, supwd) -> string 
+		   Description: encrypts @from string using public/private key (from usb token) and returns the cyphertex as string.
+		   note(1): for public key use 1 as key_type and 2 as private key_type, otherwise retrun "nErr_INVKT" as error.
+		   note(2): if privat key is used for encryption so password(supwd) should be set.   
+		   note(3): for more information refer to "RSA_private_encrypt", "RSA_public_encrypt" man pages.  
+	
+	RsaDecrypt (key_type, cyphertex, supwd) -> string
+		   Description: recovers the message digest @cyphertex using public/private key and returns the text as string.
+		   note(1): for public key use 1 as key_type and 2 as private key_type, otherwise retrun "nErr_INVKT" as error.
+		   note(2): if privat key is used for decryption so password(supwd) should be set.   
+		   note(3): for more information refer to "RSA_private_decrypt", "RSA_public_decrypt" man pages.  
+		   		   
+		   
+	GetSignature (type, message, supwd) -> string
+		     Description: signs the message digest @message using the private key rsa, gets it from 
+		     token; and returns the text as hex data.
+		     note(1): @type: type denotes the message digest algorithm that was used to generate m.                   
+		     	       It usually is one of NID_sha1, NID_ripemd160 and NID_md5; If type is NID_md5_sha1,
+			       an SSL signature (MD5 and SHA1 message digests with PKCS #1 padding and no algorithm identifier) is created.
+		     note(2): for more information refer to "RSA_sign" man page.
+	
+	VerifySignature (type, message, signature) -> int
+		     Description: verifies that the @signature matches a given @message digest, and return status 0 as success 65 as error.
+                     note(0): in some cases this function returns -1, and this means sth wrong happend so check TkErr property. 
+		     note(1): @type: type denotes the message digest algorithm that was used to generate @message.
+		     	      It usually is one of NID_sha1, NID_ripemd160 and NID_md5; If type is NID_md5_sha1, 
+			      an SSL signature (MD5 and SHA1 message digests with PKCS #1 padding and no algorithm identifier) is created.
+		     note(2): for more information refer to "RSA_verify" man page.
+		     
+
+Novin Token PROPERTIES:
+
+ 
+	--- read only token properties ---
+
+	serial -> wstring
+	       Description: return serial number of selected token.
+	       note : return "0.0.0.0" if no token has selected.
+
+	TkErr <- wstring
+	      Description: return error number of functions. 0 for success and other errors r listed below .
+
+FUNCTION ERRORS: 
+
+	you can get last error number of novin token functions by TkErr property.
+	
+	TkErr : returns from 0 to 129. (number definitions can be obtained from NovinToken Rev3).
+	
+             + ------------------------ + ------ + ----------------------------------------- +
+             |         symbole          |  ErrNo |               description                 |
+             + ------------------------ + ------ + ----------------------------------------- +
+             |        nErr_OK           |   0    |              normal status                |
+             + ------------------------ + ------ + ----------------------------------------- +
+             |        nErr_DNF          |   1    |            device not found               |
+             + ------------------------ + ------ + ----------------------------------------- +
+             |        nErr_IOE          |   3    |   IO ERROR; send packet(to token) error   |
+             + ------------------------ + ------ + ----------------------------------------- +
+             |        nErr_IVP          |   12   |           wrong VID or password           |
+             + ------------------------ + ------ + ----------------------------------------- +
+             |        nErr_DIS          |   13   |             device disabled               |
+             + ------------------------ + ------ + ----------------------------------------- +
+             |        nErr_BLK          |   14   |             device blocked                |
+             + ------------------------ + ------ + ----------------------------------------- +
+             |        nErr_OTE          |   16   |             general error                 |
+             + ------------------------ + ------ + ----------------------------------------- +
+             |        nErr_CAT          |   19   |             device suspended              |
+             + ------------------------ + ------ + ----------------------------------------- +
+             |        nErr_RSANS        |   60   |          RSA 1024 not enabled             |
+             + ------------------------ + ------ + ----------------------------------------- +
+             |        nErr_INVKT        |   64   |     invalid key type (public/private      |
+             |                          |        |        sould be in range {1,2}            |
+             + ------------------------ + ------ + ----------------------------------------- +
+             |        nErr_INSGN        |   65   |        invalid digital signature          |
+             + ------------------------ + ------ + ----------------------------------------- +
+             |        nErr_DNS          |  132   |         not any device selected           |
+             + ------------------------ + ------ + ------------------------------------------+
+	     |        nErr_DLL          |  133   |             dll load error                |
+             + ------------------------ + ------ + ----------------------------------------- +
+
+
+****************************************************************
+**            ******************** EXAMPLE *********************
+****************************************************************
+**
+**
+**
+**
+	function token()
+	{
+	   public = 1
+	   private = 2
+	   msg = "test message"
+
+	   alert ("Number of devices which is connected : " + plugin().GetDeviceCount())	
+	
+	   plugin().GetToken()
+	   if (plugin().TkErr != 0)
+	   {
+	      alert ("GetToken: errorNo : " + plugin().TkErr)
+	   } else {
+	      alert ("selected device serial : \n\t\t\t" + plugin().serial)
+	   }
+
+	   pubKey = plugin().GetPublicKey()
+	   if (plugin().TkErr != 0)
+	   {
+	      alert ("\n\tGetPublicKey: errorNo : " + plugin().TkErr)
+	   }	
+	   else
+	   {
+	      alert ("publickey is : \n" + pubKey)
+	   }
+	
+	   enc_msg = plugin().RsaEncrypt (public, msg, '333')
+	   if (plugin().TkErr != 0)
+	   {
+	      alert ("\n\tRsaEncrypt: errorNo : " + plugin().TkErr)
+	   }
+	   else 
+	   {
+	      alert ("\n\t encrypted hex message: \n" + enc_msg)
+	   }
+	
+	   new_msg = plugin().RsaDecrypt (private, enc_msg, '333')
+	   if (plugin().TkErr != 0)
+	   {
+	      alert ("\n\tRsaDecrypt : " + plugin().TkErr)
+	   }
+	   else 
+	   {
+	      alert ("\n\tDecrypted message : \n\t\t\t" + new_msg)
+	   }
+	
+	   sgn_msg = plugin().GetSignature (3, msg, '333')
+	   if (plugin().TkErr != 0)
+	   {
+	      alert ("\n\t GetSignature: errorNo : " + plugin().TkErr )
+	   } else {
+	      alert ("\n\tSignature message : \n\t\t\t" + sgn_msg)
+	   }
+	
+	   verify = plugin().VerifySignature (3, msg, sgn_msg)
+	   if (plugin().TkErr != 0)
+	   {
+	      alert ("\n\t VerifySignature: errorNo : " + plugin().TkErr )
+	   } else {
+	      alert ("\n\t verification status : " + verify )
+	   }
+	
+	}
+	

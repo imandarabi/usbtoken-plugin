@@ -1,0 +1,19 @@
+PACK_NAME : < NAME     - VERSION - ARCH  >.deb
+sample:     <fumplugin - 1.0.0   - x86_64 .deb
+
+release directory have distribution direcotries which contains .deb package 
+for that released distro.
+
+
+=============== this is depricated version ==================
+PACK_NAME : < NAME - VERSION . SSL_VER - ARCH >
+sample:	    <fumplugin - 1  .   1.0   - x86_64>
+
+for newer version of debian 7 and ubuntu versions : >= 12.04
+    fumplugin-1.1.0-x86_64.deb: compiled with libssl1.0.0, amd64 arch
+    fumplugin-1.1.0-x86_64.deb: compiled with libssl1.0.0, amd64 arch
+
+for older version of debian 6 and ubuntu versions : 10.04, 10.10, 11.04
+    fumplugin-1.0.9-i686.deb: compiled with libssl0.9.8, i686 arch
+    fumplugin-1.0.9-i686.deb: compiled with libssl0.9.8, i686 arch
+

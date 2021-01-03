@@ -1,0 +1,11 @@
+install package with dpkg :
+	dpkg -i <PACKAGE_NAME>
+
+
+The full documentation for fumplugin is maintained as a manual page.
+the  command 
+      
+      man novinlib
+
+should give you access to the complete manual.
+

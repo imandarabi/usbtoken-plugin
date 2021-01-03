@@ -1,0 +1,13 @@
+
+==== installation instruction ====
+install package with dpkg :
+	$ sudo dpkg -i <PACKAGE_NAME>
+
+
+note: to get "os version" run this command:
+      $ cat /etc/issue
+      	Ubuntu 12.04 LTS \n \l
+
+note: to get "architecture" of your system run this command:
+      $ uname -m
+      	x86_64

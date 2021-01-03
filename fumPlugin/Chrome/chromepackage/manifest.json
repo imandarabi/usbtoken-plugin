@@ -1,0 +1,9 @@
+{
+  "name": "fumplugin",
+  "version": "${FBSTRING_PLUGIN_VERSION}",
+  "description": "Ferdowsi University of Mashhad's usb token with rfid plugin",
+
+	"plugins": [
+    { "path": "npfumPlugin.dll", "public": true }
+  ]
+}
